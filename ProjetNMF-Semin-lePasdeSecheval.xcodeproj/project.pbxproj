@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF2FD73826091D2B008B2E11 /* testing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF2FD73626091D2B008B2E11 /* testing.cpp */; };
 		BFF262BA25FD310A001620AD /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BFF262B925FD310A001620AD /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +24,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BF2FD73526091CD8008B2E11 /* stdafx.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = stdafx.hpp; sourceTree = "<group>"; };
+		BF2FD73626091D2B008B2E11 /* testing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testing.cpp; sourceTree = "<group>"; };
+		BF2FD73726091D2B008B2E11 /* testing.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = testing.hpp; sourceTree = "<group>"; };
 		BFF262B625FD310A001620AD /* ProjetNMF-Semin-lePasdeSecheval */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "ProjetNMF-Semin-lePasdeSecheval"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFF262B925FD310A001620AD /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -58,6 +62,9 @@
 			isa = PBXGroup;
 			children = (
 				BFF262B925FD310A001620AD /* main.cpp */,
+				BF2FD73526091CD8008B2E11 /* stdafx.hpp */,
+				BF2FD73626091D2B008B2E11 /* testing.cpp */,
+				BF2FD73726091D2B008B2E11 /* testing.hpp */,
 			);
 			path = "ProjetNMF-Semin-lePasdeSecheval";
 			sourceTree = "<group>";
@@ -118,6 +125,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF2FD73826091D2B008B2E11 /* testing.cpp in Sources */,
 				BFF262BA25FD310A001620AD /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -242,6 +250,8 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = XJSMYYXKS5;
 				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "/Users/Louis/OneDrive/Documents/LE 2020-2021/T3/Méthodes numériques avancées/Projet/ProjetNMF-Semin-lePasdeSecheval/ProjetNMF-Semin-lePasdeSecheval/stdafx.hpp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -252,6 +262,8 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = XJSMYYXKS5;
 				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "/Users/Louis/OneDrive/Documents/LE 2020-2021/T3/Méthodes numériques avancées/Projet/ProjetNMF-Semin-lePasdeSecheval/ProjetNMF-Semin-lePasdeSecheval/stdafx.hpp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

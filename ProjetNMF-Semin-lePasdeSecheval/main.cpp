@@ -6,6 +6,8 @@
 //
 
 #include <iostream>
+#include "stdafx.hpp"
+#include "testing.hpp"
 
 int main(int argc, const char * argv[])
 {
