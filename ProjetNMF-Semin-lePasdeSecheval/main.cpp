@@ -9,9 +9,12 @@
 #include "stdafx.hpp"
 #include "testing.hpp"
 
+#include "Matrix.hpp"
+
 int main(int argc, const char * argv[])
 {
     // insert code here...
     std::cout << "Hello there!\n";
+    testMatrix();
     return 0;
 }
