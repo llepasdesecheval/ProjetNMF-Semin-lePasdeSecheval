@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		BF2FD73826091D2B008B2E11 /* testing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF2FD73626091D2B008B2E11 /* testing.cpp */; };
 		BFCFE819260C884D00C6BC55 /* Matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BFCFE817260C884D00C6BC55 /* Matrix.cpp */; };
+		BFCFE81D260C89FA00C6BC55 /* Basis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BFCFE81B260C89FA00C6BC55 /* Basis.cpp */; };
 		BFF262BA25FD310A001620AD /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BFF262B925FD310A001620AD /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +31,8 @@
 		BF2FD73726091D2B008B2E11 /* testing.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = testing.hpp; sourceTree = "<group>"; };
 		BFCFE817260C884D00C6BC55 /* Matrix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix.cpp; sourceTree = "<group>"; };
 		BFCFE818260C884D00C6BC55 /* Matrix.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Matrix.hpp; sourceTree = "<group>"; };
+		BFCFE81B260C89FA00C6BC55 /* Basis.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Basis.cpp; sourceTree = "<group>"; };
+		BFCFE81C260C89FA00C6BC55 /* Basis.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Basis.hpp; sourceTree = "<group>"; };
 		BFF262B625FD310A001620AD /* ProjetNMF-Semin-lePasdeSecheval */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "ProjetNMF-Semin-lePasdeSecheval"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFF262B925FD310A001620AD /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -64,6 +67,8 @@
 		BFF262B825FD310A001620AD /* ProjetNMF-Semin-lePasdeSecheval */ = {
 			isa = PBXGroup;
 			children = (
+				BFCFE81B260C89FA00C6BC55 /* Basis.cpp */,
+				BFCFE81C260C89FA00C6BC55 /* Basis.hpp */,
 				BFF262B925FD310A001620AD /* main.cpp */,
 				BFCFE817260C884D00C6BC55 /* Matrix.cpp */,
 				BFCFE818260C884D00C6BC55 /* Matrix.hpp */,
@@ -130,6 +135,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFCFE81D260C89FA00C6BC55 /* Basis.cpp in Sources */,
 				BFCFE819260C884D00C6BC55 /* Matrix.cpp in Sources */,
 				BF2FD73826091D2B008B2E11 /* testing.cpp in Sources */,
 				BFF262BA25FD310A001620AD /* main.cpp in Sources */,
