@@ -8,6 +8,7 @@
 #include <iostream>
 #include "stdafx.hpp"
 #include "testing.hpp"
+#include "PolynomialBasis.hpp"
 
 #include "Matrix.hpp"
 
@@ -16,5 +17,6 @@ int main(int argc, const char * argv[])
     // insert code here...
     std::cout << "Hello there!\n";
     testMatrix();
+    testPolynomialBasis();
     return 0;
 }
