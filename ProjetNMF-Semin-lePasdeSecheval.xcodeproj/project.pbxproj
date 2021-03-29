@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BF2FD73826091D2B008B2E11 /* testing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF2FD73626091D2B008B2E11 /* testing.cpp */; };
+		BFB06D2B26125F0500A5DF6D /* PricerOutput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BFB06D2926125F0500A5DF6D /* PricerOutput.cpp */; };
 		BFCFE819260C884D00C6BC55 /* Matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BFCFE817260C884D00C6BC55 /* Matrix.cpp */; };
 		BFCFE81D260C89FA00C6BC55 /* Basis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BFCFE81B260C89FA00C6BC55 /* Basis.cpp */; };
 		BFF262BA25FD310A001620AD /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BFF262B925FD310A001620AD /* main.cpp */; };
@@ -29,6 +30,9 @@
 		BF2FD73526091CD8008B2E11 /* stdafx.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = stdafx.hpp; sourceTree = "<group>"; };
 		BF2FD73626091D2B008B2E11 /* testing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testing.cpp; sourceTree = "<group>"; };
 		BF2FD73726091D2B008B2E11 /* testing.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = testing.hpp; sourceTree = "<group>"; };
+		BFB06D2826125EA700A5DF6D /* Pricer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Pricer.hpp; sourceTree = "<group>"; };
+		BFB06D2926125F0500A5DF6D /* PricerOutput.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PricerOutput.cpp; sourceTree = "<group>"; };
+		BFB06D2A26125F0500A5DF6D /* PricerOutput.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PricerOutput.hpp; sourceTree = "<group>"; };
 		BFCFE817260C884D00C6BC55 /* Matrix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix.cpp; sourceTree = "<group>"; };
 		BFCFE818260C884D00C6BC55 /* Matrix.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Matrix.hpp; sourceTree = "<group>"; };
 		BFCFE81B260C89FA00C6BC55 /* Basis.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Basis.cpp; sourceTree = "<group>"; };
@@ -70,6 +74,9 @@
 				BFCFE81B260C89FA00C6BC55 /* Basis.cpp */,
 				BFCFE81C260C89FA00C6BC55 /* Basis.hpp */,
 				BFF262B925FD310A001620AD /* main.cpp */,
+				BFB06D2826125EA700A5DF6D /* Pricer.hpp */,
+				BFB06D2926125F0500A5DF6D /* PricerOutput.cpp */,
+				BFB06D2A26125F0500A5DF6D /* PricerOutput.hpp */,
 				BFCFE817260C884D00C6BC55 /* Matrix.cpp */,
 				BFCFE818260C884D00C6BC55 /* Matrix.hpp */,
 				BF2FD73526091CD8008B2E11 /* stdafx.hpp */,
@@ -135,6 +142,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFB06D2B26125F0500A5DF6D /* PricerOutput.cpp in Sources */,
 				BFCFE81D260C89FA00C6BC55 /* Basis.cpp in Sources */,
 				BFCFE819260C884D00C6BC55 /* Matrix.cpp in Sources */,
 				BF2FD73826091D2B008B2E11 /* testing.cpp in Sources */,
