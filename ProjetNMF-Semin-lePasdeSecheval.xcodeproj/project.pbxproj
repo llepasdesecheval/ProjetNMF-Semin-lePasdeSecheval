@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		BF2FD73826091D2B008B2E11 /* testing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF2FD73626091D2B008B2E11 /* testing.cpp */; };
 		BF6F253C261642B2008F6E14 /* LaguerreBasis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF6F253A261642B2008F6E14 /* LaguerreBasis.cpp */; };
+		BF6F254026164399008F6E14 /* BinomialTreePricer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF6F253E26164399008F6E14 /* BinomialTreePricer.cpp */; };
 		BFA491F22615D686004C3758 /* VanillaOption.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BFA491F02615D686004C3758 /* VanillaOption.cpp */; };
 		BFA491F62615D7BE004C3758 /* EurOption.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BFA491F42615D7BE004C3758 /* EurOption.cpp */; };
 		BFA491FA2615D844004C3758 /* matlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BFA491F82615D844004C3758 /* matlib.cpp */; };
@@ -40,6 +41,8 @@
 		BF2FD73726091D2B008B2E11 /* testing.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = testing.hpp; sourceTree = "<group>"; };
 		BF6F253A261642B2008F6E14 /* LaguerreBasis.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LaguerreBasis.cpp; sourceTree = "<group>"; };
 		BF6F253B261642B2008F6E14 /* LaguerreBasis.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LaguerreBasis.hpp; sourceTree = "<group>"; };
+		BF6F253E26164399008F6E14 /* BinomialTreePricer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BinomialTreePricer.cpp; sourceTree = "<group>"; };
+		BF6F253F26164399008F6E14 /* BinomialTreePricer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BinomialTreePricer.hpp; sourceTree = "<group>"; };
 		BFA491F02615D686004C3758 /* VanillaOption.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VanillaOption.cpp; sourceTree = "<group>"; };
 		BFA491F12615D686004C3758 /* VanillaOption.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VanillaOption.hpp; sourceTree = "<group>"; };
 		BFA491F42615D7BE004C3758 /* EurOption.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EurOption.cpp; sourceTree = "<group>"; };
@@ -97,6 +100,8 @@
 			children = (
 				BFCFE81B260C89FA00C6BC55 /* Basis.cpp */,
 				BFCFE81C260C89FA00C6BC55 /* Basis.hpp */,
+				BF6F253E26164399008F6E14 /* BinomialTreePricer.cpp */,
+				BF6F253F26164399008F6E14 /* BinomialTreePricer.hpp */,
 				BFA491FC2615DECF004C3758 /* BSMModel.cpp */,
 				BFA491FD2615DECF004C3758 /* BSMModel.hpp */,
 				BFA491F42615D7BE004C3758 /* EurOption.cpp */,
@@ -183,6 +188,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BFB06D3B261261C000A5DF6D /* PolynomialBasis.cpp in Sources */,
+				BF6F254026164399008F6E14 /* BinomialTreePricer.cpp in Sources */,
 				BFB06D2B26125F0500A5DF6D /* PricerOutput.cpp in Sources */,
 				BFA491FE2615DECF004C3758 /* BSMModel.cpp in Sources */,
 				BF6F253C261642B2008F6E14 /* LaguerreBasis.cpp in Sources */,

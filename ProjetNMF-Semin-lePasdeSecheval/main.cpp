@@ -14,6 +14,7 @@
 #include "VanillaOption.hpp"
 #include "HermiteBasis.hpp"
 #include "LaguerreBasis.hpp"
+#include "BinomialTreePricer.hpp"
 
 int main(int argc, const char * argv[])
 {
@@ -25,5 +26,6 @@ int main(int argc, const char * argv[])
     testVanillaOption();
     testHermiteBasis();
     testLaguerreBasis();
+    testBinomialTreePricer();
     return 0;
 }
