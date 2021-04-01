@@ -15,6 +15,7 @@
 #include "HermiteBasis.hpp"
 #include "LaguerreBasis.hpp"
 #include "BinomialTreePricer.hpp"
+#include "MonteCarloPricer.hpp"
 
 int main(int argc, const char * argv[])
 {
@@ -27,5 +28,6 @@ int main(int argc, const char * argv[])
     testHermiteBasis();
     testLaguerreBasis();
     testBinomialTreePricer();
+    testMonteCarloPricer();
     return 0;
 }
