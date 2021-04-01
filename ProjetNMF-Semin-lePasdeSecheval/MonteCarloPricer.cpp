@@ -46,8 +46,82 @@ PricerOutput MonteCarloPricer::price(const VanillaOption& option, const BSMModel
 {
     if (option.isAmerican())
     {
-        PricerOutput result(0);
+        ASSERT(m_basis != nullptr);
+        // We follow the 4 steps of the LS algorithm
+        double T = option.Maturity();
+        double timeStep = (T - model.Date())/m_nSteps;
+        double stepDiscount = exp(-model.InterestRate() * timeStep);
+        double discount = 1; // Will be changed regularly
 
+        // Step 1 : Generation of stock price paths
+        Matrix pricePaths = generatePricePaths(model, T);
+
+        // Step 2 : Computation of terminal payoffs
+        Matrix payoffs(m_nScenarii, m_nSteps, true);
+        payoffs.setColumn(m_nSteps - 1, option.payoff(pricePaths.ExtractColumn(m_nSteps)));
+
+        // Step 3 : Backward induction and regressions
+        for (std::size_t k = m_nSteps - 1; k > 0; --k)
+        {
+            std::vector<double> ITMStockPrices;
+            std::vector<double> ITMFutureCashFlows;
+            std::vector<std::size_t> ITMIndices;
+            for (std::size_t i = 0; i < m_nScenarii; ++i)
+            {
+                double currentPrice = pricePaths(i, k);
+                if (option.payoff(currentPrice) > 0) // Separate ITM paths
+                {
+                    ITMIndices.push_back(i);
+                    ITMStockPrices.push_back(currentPrice);
+                    std::vector<double> temp = payoffs.ExtractRow(i);
+                    discount = 1;
+                    for (std::size_t m = 0; m < m_nSteps - k; ++m)
+                    {
+                        discount *= stepDiscount;
+                        temp[k + m] *= discount;
+                    }
+                    ITMFutureCashFlows.push_back(sum(temp));
+                }
+            }
+            
+            std::vector<double> regCoef = RegressionCoefficients(ITMStockPrices, ITMFutureCashFlows, *m_basis);
+            std::vector<double> currentPrices = pricePaths.ExtractColumn(k);
+            std::vector<double> continuation = m_basis->RegressorMatrix(currentPrices) * regCoef;
+            ASSERT(continuation.size() == m_nScenarii);
+            
+            for (auto i : ITMIndices)
+            {
+                double exercise = option.payoff(currentPrices[i]);
+                if (continuation[i] < exercise)
+                {
+                    // There can be at most one exercise per path
+                    payoffs.setRow(i, std::vector<double>(m_nSteps, 0));
+                    payoffs(i, k - 1) = exercise;
+                }
+            }
+        }
+
+        // Step 4 : Discounting option's cash flows and averaging across scenarios
+        std::vector<double> USOptionDCF;
+        for (std::size_t i = 0; i < m_nScenarii; ++i)
+        {
+            discount = 1;
+            for (std::size_t j = 0; j < m_nSteps; ++j)
+            {
+                // We discount the cash flow by the appropriate amount
+                discount *= stepDiscount;
+                payoffs(i, j) *= discount;
+            }
+            // We add it to our payoff sample vector
+            USOptionDCF.push_back(max(payoffs.ExtractRow(i)));
+        }
+        
+        // We compare it to exercising at time 0
+        std::transform(USOptionDCF.begin(), USOptionDCF.end(), USOptionDCF.begin(), [&model, &option](double x)
+                       { return (option.payoff(model.StockPrice()) > x) ? option.payoff(model.StockPrice()) : x; });
+
+        PricerOutput result(USOptionDCF, 0.99);
+        
         return result;
     }
     else
@@ -87,8 +161,28 @@ static void testEuropeanOptionPricing()
     ASSERT_APPROX_EQUAL(output.Estimate(), EurCall2.price(model1).Estimate(), output.Confidence());
 }
 
+static void testUSOptionPricing()
+{
+     LaguerreBasis basis(2);
+     MonteCarloPricer mc(25000, 250, &basis);
+     BSMModel model1(100, 0.2, 0.05, 0.08); // High dividend yield so the call might be exercised
+     std::shared_ptr<VanillaOption> USCall = VanillaOption::newOption(100, 1, call, American);
+     BinomialTreePricer tree(52);
+     
+     PricerOutput outputCall = mc.price(*USCall, model1);
+     double comparisonCall = tree.price(*USCall, model1).Estimate();
+     ASSERT_APPROX_EQUAL(outputCall.Estimate(), comparisonCall, outputCall.Confidence());
+     
+     BSMModel model2(100, 0.2, 0.05); // No dividends, so the put is more likely to be exercised
+     std::shared_ptr<VanillaOption> USPut = VanillaOption::newOption(100, 1, put, American);
+     PricerOutput outputPut = mc.price(*USPut, model2);
+     double comparisonPut = tree.price(*USPut, model2).Estimate();
+     ASSERT_APPROX_EQUAL(outputPut.Estimate(), comparisonPut, outputPut.Confidence());
+}
+
 void testMonteCarloPricer()
 {
     TEST(testGeneratePath);
     TEST(testEuropeanOptionPricing);
+    TEST(testUSOptionPricing);
 }
