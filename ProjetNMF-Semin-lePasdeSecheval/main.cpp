@@ -11,6 +11,7 @@
 #include "PolynomialBasis.hpp"
 #include "Matrix.hpp"
 #include "matlib.hpp"
+#include "VanillaOption.hpp"
 
 int main(int argc, const char * argv[])
 {
@@ -19,5 +20,6 @@ int main(int argc, const char * argv[])
     testMatrix();
     testPolynomialBasis();
     testMatlib();
+    testVanillaOption();
     return 0;
 }
