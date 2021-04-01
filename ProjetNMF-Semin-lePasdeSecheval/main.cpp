@@ -13,6 +13,7 @@
 #include "matlib.hpp"
 #include "VanillaOption.hpp"
 #include "HermiteBasis.hpp"
+#include "LaguerreBasis.hpp"
 
 int main(int argc, const char * argv[])
 {
@@ -23,5 +24,6 @@ int main(int argc, const char * argv[])
     testMatlib();
     testVanillaOption();
     testHermiteBasis();
+    testLaguerreBasis();
     return 0;
 }
