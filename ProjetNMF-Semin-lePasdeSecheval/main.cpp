@@ -12,6 +12,7 @@
 #include "Matrix.hpp"
 #include "matlib.hpp"
 #include "VanillaOption.hpp"
+#include "HermiteBasis.hpp"
 
 int main(int argc, const char * argv[])
 {
@@ -21,5 +22,6 @@ int main(int argc, const char * argv[])
     testPolynomialBasis();
     testMatlib();
     testVanillaOption();
+    testHermiteBasis();
     return 0;
 }
