@@ -9,8 +9,8 @@
 #include "stdafx.hpp"
 #include "testing.hpp"
 #include "PolynomialBasis.hpp"
-
 #include "Matrix.hpp"
+#include "matlib.hpp"
 
 int main(int argc, const char * argv[])
 {
@@ -18,5 +18,6 @@ int main(int argc, const char * argv[])
     std::cout << "Hello there!\n";
     testMatrix();
     testPolynomialBasis();
+    testMatlib();
     return 0;
 }
