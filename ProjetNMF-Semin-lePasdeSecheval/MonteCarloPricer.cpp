@@ -19,110 +19,174 @@ m_nScenarii(nScenarii), m_nSteps(nSteps), m_basis(basis) {}
 Matrix MonteCarloPricer::generatePricePaths(const BSMModel& model, double toDate) const
 {
     double timeStep = (toDate - model.Date())/m_nSteps;
-    Matrix res(m_nScenarii, m_nSteps + 1, false);
+    Matrix result(m_nScenarii, m_nSteps + 1, false);
 
     // We compute all necessary parameters
     double drift = model.InterestRate() - model.DividendYield();
     double volatility = model.Volatility();
     double logDrift = (drift - 0.5 * volatility * volatility) * timeStep; // drift term of log price
     double logDiffusion = volatility * sqrt(timeStep); // diffusion term of log price
-    res.setColumn(0, std::vector<double>(m_nScenarii, model.StockPrice()));
+    result.setColumn(0, std::vector<double>(m_nScenarii, model.StockPrice()));
 
     for (std::size_t j = 0; j < m_nSteps; ++j)
     {
-        std::vector<double> temp(res.ExtractColumn(j));
+        std::vector<double> temp(result.ExtractColumn(j));
         // Log returns
         std::vector<double> returns = randN(m_nScenarii, logDiffusion, logDrift);
         // Returns
         std::transform(returns.begin(), returns.end(), returns.begin(), [](double x) { return exp(x); });
         // Price at step j + 1 = Price at step j * return(j, j + 1)
         std::transform(temp.begin(), temp.end(), returns.begin(), temp.begin(), std::multiplies<>{});
-        res.setColumn(j + 1, temp);
+        result.setColumn(j + 1, temp);
     }
-    return res;
+    return result;
+}
+
+Matrix MonteCarloPricer::LSWeights(const VanillaOption& option, const BSMModel& model, const Matrix& pricePaths) const
+{
+    double timeStep = (option.Maturity() - model.Date())/m_nSteps;
+    double stepDiscount = exp(-model.InterestRate() * timeStep);
+    double discount = 1; // Will change regularly
+    
+    Matrix result(m_basis->NbRegressors() + 1, m_nSteps - 1, false);
+    
+    // Computation of terminal payoffs
+    Matrix payoffs(m_nScenarii, m_nSteps, true);
+    payoffs.setColumn(m_nSteps - 1, option.payoff(pricePaths.ExtractColumn(m_nSteps)));
+    
+    // Backward induction and regressions
+    for (std::size_t k = m_nSteps - 1; k > 0; --k)
+    {
+        std::vector<double> ITMStockPrices;
+        std::vector<double> ITMFutureCashFlows;
+        std::vector<std::size_t> ITMIndices;
+        for (std::size_t i = 0; i < m_nScenarii; ++i)
+        {
+            double currentPrice = pricePaths(i, k);
+            if (option.payoff(currentPrice) > 0) // Separate ITM paths
+            {
+                ITMIndices.push_back(i);
+                ITMStockPrices.push_back(currentPrice);
+                std::vector<double> temp = payoffs.ExtractRow(i);
+                discount = 1;
+                for (std::size_t m = 0; m < m_nSteps - k; ++m)
+                {
+                    discount *= stepDiscount;
+                    temp[k + m] *= discount;
+                }
+                ITMFutureCashFlows.push_back(sum(temp));
+            }
+        }
+        
+        result.setColumn(k - 1, RegressionCoefficients(ITMStockPrices, ITMFutureCashFlows, *m_basis));
+        std::vector<double> currentPrices = pricePaths.ExtractColumn(k);
+        std::vector<double> continuation = m_basis->RegressorMatrix(currentPrices) * result.ExtractColumn(k - 1);
+        ASSERT(continuation.size() == m_nScenarii);
+        
+        for (auto i : ITMIndices)
+        {
+            double exercise = option.payoff(currentPrices[i]);
+            if (continuation[i] < exercise)
+            {
+                // There can be at most one exercise per path
+                payoffs.setRow(i, std::vector<double>(m_nSteps, 0));
+                payoffs(i, k - 1) = exercise;
+            }
+        }
+    }
+    return result;
+}
+
+PricerOutput MonteCarloPricer::LSPrice(const VanillaOption& option, const BSMModel& model, const Matrix& pricePaths) const
+{
+    ASSERT(m_basis != nullptr);
+    
+    double timeStep = (option.Maturity() - model.Date())/m_nSteps;
+    double stepDiscount = exp(-model.InterestRate() * timeStep);
+    double discount = 1; // Will be changed regularly
+
+    // Step 1 : Computation of terminal payoffs
+    Matrix payoffs(m_nScenarii, m_nSteps, true);
+    payoffs.setColumn(m_nSteps - 1, option.payoff(pricePaths.ExtractColumn(m_nSteps)));
+
+    // Step 2 : Backward induction and regressions
+    for (std::size_t k = m_nSteps - 1; k > 0; --k)
+    {
+        std::vector<double> ITMStockPrices;
+        std::vector<double> ITMFutureCashFlows;
+        std::vector<std::size_t> ITMIndices;
+        for (std::size_t i = 0; i < m_nScenarii; ++i)
+        {
+            double currentPrice = pricePaths(i, k);
+            if (option.payoff(currentPrice) > 0) // Separate ITM paths
+            {
+                ITMIndices.push_back(i);
+                ITMStockPrices.push_back(currentPrice);
+                std::vector<double> temp = payoffs.ExtractRow(i);
+                discount = 1;
+                for (std::size_t m = 0; m < m_nSteps - k; ++m)
+                {
+                    discount *= stepDiscount;
+                    temp[k + m] *= discount;
+                }
+                ITMFutureCashFlows.push_back(sum(temp));
+            }
+        }
+        
+        std::vector<double> regCoef = RegressionCoefficients(ITMStockPrices, ITMFutureCashFlows, *m_basis);
+        std::vector<double> currentPrices = pricePaths.ExtractColumn(k);
+        std::vector<double> continuation = m_basis->RegressorMatrix(currentPrices) * regCoef;
+        ASSERT(continuation.size() == m_nScenarii);
+        
+        for (auto i : ITMIndices)
+        {
+            double exercise = option.payoff(currentPrices[i]);
+            if (continuation[i] < exercise)
+            {
+                // There can be at most one exercise per path
+                payoffs.setRow(i, std::vector<double>(m_nSteps, 0));
+                payoffs(i, k - 1) = exercise;
+            }
+        }
+    }
+
+    // Step 3 : Discounting option's cash flows and averaging across scenarios
+    std::vector<double> USOptionDCF;
+    for (std::size_t i = 0; i < m_nScenarii; ++i)
+    {
+        discount = 1;
+        for (std::size_t j = 0; j < m_nSteps; ++j)
+        {
+            // We discount the cash flow by the appropriate amount
+            discount *= stepDiscount;
+            payoffs(i, j) *= discount;
+        }
+        // We add it to our payoff sample vector
+        USOptionDCF.push_back(max(payoffs.ExtractRow(i)));
+    }
+    
+    // We compare it to exercising at time 0
+    std::transform(USOptionDCF.begin(), USOptionDCF.end(), USOptionDCF.begin(), [&model, &option](double x)
+                   { return (option.payoff(model.StockPrice()) > x) ? option.payoff(model.StockPrice()) : x; });
+
+    PricerOutput result(USOptionDCF, 0.99);
+    
+    return result;
+}
+
+PricerOutput MonteCarloPricer::ABPrice(const VanillaOption& option, const BSMModel& model, const Matrix& pricePaths) const
+{
+    return PricerOutput(0);
 }
 
 PricerOutput MonteCarloPricer::price(const VanillaOption& option, const BSMModel& model) const
 {
     if (option.isAmerican())
     {
-        ASSERT(m_basis != nullptr);
-        // We follow the 4 steps of the LS algorithm
-        double T = option.Maturity();
-        double timeStep = (T - model.Date())/m_nSteps;
-        double stepDiscount = exp(-model.InterestRate() * timeStep);
-        double discount = 1; // Will be changed regularly
-
         // Step 1 : Generation of stock price paths
-        Matrix pricePaths = generatePricePaths(model, T);
-
-        // Step 2 : Computation of terminal payoffs
-        Matrix payoffs(m_nScenarii, m_nSteps, true);
-        payoffs.setColumn(m_nSteps - 1, option.payoff(pricePaths.ExtractColumn(m_nSteps)));
-
-        // Step 3 : Backward induction and regressions
-        for (std::size_t k = m_nSteps - 1; k > 0; --k)
-        {
-            std::vector<double> ITMStockPrices;
-            std::vector<double> ITMFutureCashFlows;
-            std::vector<std::size_t> ITMIndices;
-            for (std::size_t i = 0; i < m_nScenarii; ++i)
-            {
-                double currentPrice = pricePaths(i, k);
-                if (option.payoff(currentPrice) > 0) // Separate ITM paths
-                {
-                    ITMIndices.push_back(i);
-                    ITMStockPrices.push_back(currentPrice);
-                    std::vector<double> temp = payoffs.ExtractRow(i);
-                    discount = 1;
-                    for (std::size_t m = 0; m < m_nSteps - k; ++m)
-                    {
-                        discount *= stepDiscount;
-                        temp[k + m] *= discount;
-                    }
-                    ITMFutureCashFlows.push_back(sum(temp));
-                }
-            }
-            
-            std::vector<double> regCoef = RegressionCoefficients(ITMStockPrices, ITMFutureCashFlows, *m_basis);
-            std::vector<double> currentPrices = pricePaths.ExtractColumn(k);
-            std::vector<double> continuation = m_basis->RegressorMatrix(currentPrices) * regCoef;
-            ASSERT(continuation.size() == m_nScenarii);
-            
-            for (auto i : ITMIndices)
-            {
-                double exercise = option.payoff(currentPrices[i]);
-                if (continuation[i] < exercise)
-                {
-                    // There can be at most one exercise per path
-                    payoffs.setRow(i, std::vector<double>(m_nSteps, 0));
-                    payoffs(i, k - 1) = exercise;
-                }
-            }
-        }
-
-        // Step 4 : Discounting option's cash flows and averaging across scenarios
-        std::vector<double> USOptionDCF;
-        for (std::size_t i = 0; i < m_nScenarii; ++i)
-        {
-            discount = 1;
-            for (std::size_t j = 0; j < m_nSteps; ++j)
-            {
-                // We discount the cash flow by the appropriate amount
-                discount *= stepDiscount;
-                payoffs(i, j) *= discount;
-            }
-            // We add it to our payoff sample vector
-            USOptionDCF.push_back(max(payoffs.ExtractRow(i)));
-        }
+        Matrix pricePaths = generatePricePaths(model, option.Maturity());
         
-        // We compare it to exercising at time 0
-        std::transform(USOptionDCF.begin(), USOptionDCF.end(), USOptionDCF.begin(), [&model, &option](double x)
-                       { return (option.payoff(model.StockPrice()) > x) ? option.payoff(model.StockPrice()) : x; });
-
-        PricerOutput result(USOptionDCF, 0.99);
-        
-        return result;
+        return LSPrice(option, model, pricePaths);
     }
     else
     {

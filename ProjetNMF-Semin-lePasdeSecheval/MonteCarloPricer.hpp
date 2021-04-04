@@ -38,6 +38,10 @@ private:
     std::size_t m_nScenarii;
     std::size_t m_nSteps;
     Basis* m_basis;
+    
+    PricerOutput LSPrice(const VanillaOption& option, const BSMModel& model, const Matrix& pricePaths) const;
+    PricerOutput ABPrice(const VanillaOption& option, const BSMModel& model, const Matrix& pricePaths) const;
+    Matrix LSWeights(const VanillaOption& option, const BSMModel& model, const Matrix& pricePaths) const;
 };
 
 void testMonteCarloPricer();
