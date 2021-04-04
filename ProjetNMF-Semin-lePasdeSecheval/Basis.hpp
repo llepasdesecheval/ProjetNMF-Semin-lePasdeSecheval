@@ -24,6 +24,14 @@ public:
     Basis(std::size_t nbRegressors);
     
     /**
+     Getter for the number of regressors, excluding constant
+     */
+    std::size_t NbRegressors() const
+    {
+        return m_nbRegressors;
+    }
+    
+    /**
      Evaluates a basis function at the desired point
      @param x Evaluation point
      @param k Index of the basis function
