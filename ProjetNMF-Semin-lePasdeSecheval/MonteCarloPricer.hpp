@@ -41,7 +41,6 @@ private:
     
     PricerOutput LSPrice(const VanillaOption& option, const BSMModel& model, const Matrix& pricePaths) const;
     PricerOutput ABPrice(const VanillaOption& option, const BSMModel& model, const Matrix& pricePaths) const;
-public:
     Matrix LSWeights(const VanillaOption& option, const BSMModel& model, const Matrix& pricePaths) const;
 };
 
