@@ -225,6 +225,21 @@ static void testEuropeanOptionPricing()
     ASSERT_APPROX_EQUAL(output.Estimate(), EurCall2.price(model1).Estimate(), output.Confidence());
 }
 
+/*
+ Numerical example from Paul Wilmott's book
+ */
+static void testLSWeights()
+{
+    Matrix pricePaths("100,92.30759,107.7357,98.04343,110.7416,95.34586;100,103.4446,111.9465,110.9322,117.8379,119.4419;100,111.2298,121.2417,137.1683,145.1687,133.1789;100,105.7152,115.0572,99.73054,100.6804,100.9471;100,98.47278,96.5825,91.32007,80.63689,82.1163;100,94.40168,94.16078,87.83702,93.84797,93.45847;100,106.7042,125.264,139.4822,132.0177,126.2041;100,84.37568,76.60055,76.21345,80.85454,95.19434;100,94.21698,88.00477,90.81541,88.63676,84.80556;100,99.81029,105.2631,101.747,103.1483,107.3703");
+    BSMModel model(100, 0.2, 0.05);
+    std::shared_ptr<VanillaOption> USPut = VanillaOption::newOption(100, 1, put, American);
+    PolynomialBasis basis(2);
+    MonteCarloPricer pricer(10, 5, &basis);
+    Matrix result = pricer.LSWeights(*USPut, model, pricePaths);
+    Matrix expected("903.58371,579.009566,-203.94825,-1075.2312;-18.505142,-12.62883,5.66129963,25.3466805;0.0955491,0.07027471,-0.0360753,-0.1472459");
+    result.assertEquals(expected, 1e-4);
+}
+
 static void testUSOptionPricing()
 {
      LaguerreBasis basis(2);
@@ -248,5 +263,6 @@ void testMonteCarloPricer()
 {
     TEST(testGeneratePath);
     TEST(testEuropeanOptionPricing);
+    TEST(testLSWeights);
     TEST(testUSOptionPricing);
 }
