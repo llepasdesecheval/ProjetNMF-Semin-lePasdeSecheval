@@ -39,6 +39,15 @@ private:
     std::size_t m_nSteps;
     Basis* m_basis;
     
+    /**
+     Nested Monte Carlo simulation (1-step, hence returns a vector)
+     @param St Spot price
+     @param horizon
+     @param nSuccessors Number of nested simulations
+     @param model Black-Scholes-Merton model (BSMModel) containing the simulation parameters
+     */
+    std::vector<double> nestedMC(double St, double horizon, std::size_t nSuccessors, const BSMModel& model);
+    
     PricerOutput LSPrice(const VanillaOption& option, const BSMModel& model, const Matrix& pricePaths) const;
     PricerOutput ABPrice(const VanillaOption& option, const BSMModel& model, const Matrix& pricePaths) const;
     Matrix LSWeights(const VanillaOption& option, const BSMModel& model, const Matrix& pricePaths) const;

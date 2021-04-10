@@ -42,6 +42,17 @@ Matrix MonteCarloPricer::generatePricePaths(const BSMModel& model, double toDate
     return result;
 }
 
+std::vector<double> MonteCarloPricer::nestedMC(double St, double horizon, std::size_t nSuccessors, const BSMModel& model)
+{
+    double volatility = model.Volatility();
+    std::vector<double> result = randN(nSuccessors, volatility * sqrt(horizon),
+                                        (model.InterestRate() - model.DividendYield()
+                                         - 0.5 * volatility * volatility) * horizon);
+    // Returns
+    std::transform(result.begin(), result.end(), result.begin(), [St](double x) { return St * exp(x); });
+    return result;
+}
+
 Matrix MonteCarloPricer::LSWeights(const VanillaOption& option, const BSMModel& model, const Matrix& pricePaths) const
 {
     double timeStep = (option.Maturity() - model.Date())/m_nSteps;
@@ -176,6 +187,10 @@ PricerOutput MonteCarloPricer::LSPrice(const VanillaOption& option, const BSMMod
 
 PricerOutput MonteCarloPricer::ABPrice(const VanillaOption& option, const BSMModel& model, const Matrix& pricePaths) const
 {
+    for (std::size_t j = 0; j < m_nSteps; ++j)
+    {
+        <#statements#>
+    }
     return PricerOutput(0);
 }
 
