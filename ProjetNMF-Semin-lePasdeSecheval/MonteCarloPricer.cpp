@@ -42,7 +42,7 @@ Matrix MonteCarloPricer::generatePricePaths(const BSMModel& model, double toDate
     return result;
 }
 
-std::vector<double> MonteCarloPricer::nestedMC(double St, double horizon, std::size_t nSuccessors, const BSMModel& model)
+std::vector<double> MonteCarloPricer::nestedMC(double St, double horizon, std::size_t nSuccessors, const BSMModel& model) const
 {
     double volatility = model.Volatility();
     std::vector<double> result = randN(nSuccessors, volatility * sqrt(horizon),
@@ -187,11 +187,44 @@ PricerOutput MonteCarloPricer::LSPrice(const VanillaOption& option, const BSMMod
 
 PricerOutput MonteCarloPricer::ABPrice(const VanillaOption& option, const BSMModel& model, const Matrix& pricePaths) const
 {
-    for (std::size_t j = 0; j < m_nSteps; ++j)
+    double timeStep = (option.Maturity() - model.Date())/m_nSteps;
+    double stepDiscount = exp(-model.InterestRate() * timeStep);
+    
+    Matrix M(pricePaths.nRows(), pricePaths.nCols(), true); // Martingale matrix
+    Matrix U(pricePaths.nRows(), pricePaths.nCols(), true); // Upper bound matrix
+    Matrix weights = LSWeights(option, model, pricePaths);
+    for (std::size_t j = 1; j < m_nSteps + 1; ++j)
     {
-        <#statements#>
+        for (std::size_t i = 0; i < m_nScenarii; ++i)
+        {
+            double spot = pricePaths(i, j);
+            std::vector<double> stepWeights = weights.ExtractColumn(j - 1);
+            double payoff = option.payoff(spot);
+            double continuation = std::inner_product(stepWeights.begin(), stepWeights.end(), m_basis->RegressorVector(spot).begin(), 0);
+            double Vt = (payoff < continuation) ? continuation : payoff;
+            std::vector<double> nestedSim = nestedMC(spot, timeStep, 100, model);
+            std::vector<double> nestedContinuations = m_basis->RegressorMatrix(nestedSim) * stepWeights;
+            std::vector<double> nestedPayoffs(nestedSim);
+            std::transform(nestedPayoffs.begin(), nestedPayoffs.end(), nestedPayoffs.begin(), [&option](double x)
+                           { return option.payoff(x); });
+            std::vector<double> temp(nestedPayoffs);
+            std::transform(nestedPayoffs.begin(), nestedPayoffs.end(), nestedContinuations.begin(), temp.begin(), std::greater<double> {});
+            double VtEst = mean(temp);
+            M(i, j) = M(i, j - 1) / stepDiscount + (Vt - VtEst); // Optimal martingale
+            if (j == m_nSteps)
+            {
+                U(i, j) = (U(i, j - 1)/ stepDiscount > mean(nestedPayoffs) - M(i, j))  ? U(i, j - 1)/ stepDiscount : mean(nestedPayoffs) - M(i, j);
+            }
+            else
+            {
+                U(i, j) = (U(i, j - 1)/ stepDiscount > option.payoff(spot) - M(i, j))  ? U(i, j - 1)/ stepDiscount : option.payoff(spot) - M(i, j);
+            }
+        }
     }
-    return PricerOutput(0);
+    double discount = exp(-model.InterestRate() * option.Maturity());
+    std::vector<double> result = U.ExtractColumn(m_nSteps);
+    std::transform(result.begin(), result.end(), result.begin(), [discount](double x) { return discount * x; });
+    return PricerOutput(result, 0.99);
 }
 
 PricerOutput MonteCarloPricer::price(const VanillaOption& option, const BSMModel& model) const
