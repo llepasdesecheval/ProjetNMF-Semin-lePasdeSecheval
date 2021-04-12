@@ -193,7 +193,7 @@ PricerOutput MonteCarloPricer::ABPrice(const VanillaOption& option, const BSMMod
     Matrix M(pricePaths.nRows(), pricePaths.nCols(), true); // Martingale matrix
     Matrix U(pricePaths.nRows(), pricePaths.nCols(), true); // Upper bound matrix
     Matrix weights = LSWeights(option, model, pricePaths);
-    for (std::size_t j = 1; j < m_nSteps + 1; ++j)
+    for (std::size_t j = 1; j < m_nSteps; ++j)
     {
         for (std::size_t i = 0; i < m_nScenarii; ++i)
         {
@@ -221,6 +221,15 @@ PricerOutput MonteCarloPricer::ABPrice(const VanillaOption& option, const BSMMod
             }
         }
     }
+    
+    for (std::size_t i = 0; i < m_nScenarii; ++i)
+    {
+        double spot = pricePaths(i, m_nSteps);
+        double terminalPayoff = option.payoff(spot);
+        M(i, m_nSteps) = M(i, m_nSteps - 1) / stepDiscount; // Optimal martingale
+        U(i, m_nSteps) = (U(i, m_nSteps - 1)/ stepDiscount > terminalPayoff - M(i, m_nSteps)) ? U(i, m_nSteps - 1)/ stepDiscount : terminalPayoff - M(i, m_nSteps);
+    }
+    
     double discount = exp(-model.InterestRate() * option.Maturity());
     std::vector<double> result = U.ExtractColumn(m_nSteps);
     std::transform(result.begin(), result.end(), result.begin(), [discount](double x) { return discount * x; });
@@ -234,7 +243,7 @@ PricerOutput MonteCarloPricer::price(const VanillaOption& option, const BSMModel
         // Step 1 : Generation of stock price paths
         Matrix pricePaths = generatePricePaths(model, option.Maturity());
         
-        return LSPrice(option, model, pricePaths);
+        return ABPrice(option, model, pricePaths);
     }
     else
     {
@@ -294,7 +303,7 @@ static void testLSWeights()
 static void testUSOptionPricing()
 {
      LaguerreBasis basis(2);
-     MonteCarloPricer mc(25000, 250, &basis);
+     MonteCarloPricer mc(10, 5, &basis);
      BSMModel model1(100, 0.2, 0.05, 0.08); // High dividend yield so the call might be exercised
      std::shared_ptr<VanillaOption> USCall = VanillaOption::newOption(100, 1, call, American);
      BinomialTreePricer tree(52);
