@@ -302,21 +302,21 @@ static void testLSWeights()
 
 static void testUSOptionPricing()
 {
-     LaguerreBasis basis(2);
-     MonteCarloPricer mc(10, 5, &basis);
-     BSMModel model1(100, 0.2, 0.05, 0.08); // High dividend yield so the call might be exercised
-     std::shared_ptr<VanillaOption> USCall = VanillaOption::newOption(100, 1, call, American);
-     BinomialTreePricer tree(52);
-     
-     PricerOutput outputCall = mc.price(*USCall, model1);
-     double comparisonCall = tree.price(*USCall, model1).Estimate();
-     ASSERT_APPROX_EQUAL(outputCall.Estimate(), comparisonCall, outputCall.Confidence());
-     
-     BSMModel model2(100, 0.2, 0.05); // No dividends, so the put is more likely to be exercised
-     std::shared_ptr<VanillaOption> USPut = VanillaOption::newOption(100, 1, put, American);
-     PricerOutput outputPut = mc.price(*USPut, model2);
-     double comparisonPut = tree.price(*USPut, model2).Estimate();
-     ASSERT_APPROX_EQUAL(outputPut.Estimate(), comparisonPut, outputPut.Confidence());
+    LaguerreBasis basis(2);
+    MonteCarloPricer mc(10, 5, &basis);
+    BSMModel model1(100, 0.2, 0.05, 0.08); // High dividend yield so the call might be exercised
+    std::shared_ptr<VanillaOption> USCall = VanillaOption::newOption(100, 1, call, American);
+    BinomialTreePricer tree(52);
+    
+    PricerOutput outputCall = mc.price(*USCall, model1);
+    double comparisonCall = tree.price(*USCall, model1).Estimate();
+    ASSERT_APPROX_EQUAL(outputCall.Estimate(), comparisonCall, outputCall.Confidence());
+    
+    BSMModel model2(100, 0.2, 0.05); // No dividends, so the put is more likely to be exercised
+    std::shared_ptr<VanillaOption> USPut = VanillaOption::newOption(100, 1, put, American);
+    PricerOutput outputPut = mc.price(*USPut, model2);
+    double comparisonPut = tree.price(*USPut, model2).Estimate();
+    ASSERT_APPROX_EQUAL(outputPut.Estimate(), comparisonPut, outputPut.Confidence());
 }
 
 void testMonteCarloPricer()
