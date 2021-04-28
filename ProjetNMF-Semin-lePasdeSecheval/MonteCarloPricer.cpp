@@ -243,7 +243,7 @@ PricerOutput MonteCarloPricer::price(const VanillaOption& option, const BSMModel
         // Step 1 : Generation of stock price paths
         Matrix pricePaths = generatePricePaths(model, option.Maturity());
         
-        return ABPrice(option, model, pricePaths);
+        return LSPrice(option, model, pricePaths);
     }
     else
     {

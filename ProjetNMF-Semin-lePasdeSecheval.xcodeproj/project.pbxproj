@@ -331,7 +331,7 @@
 				DEVELOPMENT_TEAM = XJSMYYXKS5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "/Users/Louis/OneDrive/Documents/LE 2020-2021/T3/Méthodes numériques avancées/Projet/ProjetNMF-Semin-lePasdeSecheval/ProjetNMF-Semin-lePasdeSecheval/stdafx.hpp";
+				GCC_PREFIX_HEADER = "/Users/Louis/Documents/Cours/LE/T3/Méthodes numériques avancées/Projet/ProjetNMF-Semin-lePasdeSecheval/ProjetNMF-Semin-lePasdeSecheval/stdafx.hpp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -343,7 +343,7 @@
 				DEVELOPMENT_TEAM = XJSMYYXKS5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "/Users/Louis/OneDrive/Documents/LE 2020-2021/T3/Méthodes numériques avancées/Projet/ProjetNMF-Semin-lePasdeSecheval/ProjetNMF-Semin-lePasdeSecheval/stdafx.hpp";
+				GCC_PREFIX_HEADER = "/Users/Louis/Documents/Cours/LE/T3/Méthodes numériques avancées/Projet/ProjetNMF-Semin-lePasdeSecheval/ProjetNMF-Semin-lePasdeSecheval/stdafx.hpp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
