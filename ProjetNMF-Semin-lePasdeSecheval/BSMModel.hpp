@@ -21,9 +21,8 @@ public:
      @param rate Constant risk-free interest rate; default is 0
      @param dividend Constand dividend yield; default is 0
      @param date Date of the model; default is 0
-     @param drift Physical drift of the stock price process; default is 0
      */
-    BSMModel(double stockPrice, double volatility, double rate = 0, double dividend = 0, double date = 0, double drift = 0);
+    BSMModel(double stockPrice, double volatility, double rate = 0, double dividend = 0, double date = 0);
 
     /**
     Initial stock price

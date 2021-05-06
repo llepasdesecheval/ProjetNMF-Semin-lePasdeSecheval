@@ -7,5 +7,5 @@
 
 #include "BSMModel.hpp"
 
-BSMModel::BSMModel(double stockPrice, double volatility, double rate, double dividend, double date, double drift) :
+BSMModel::BSMModel(double stockPrice, double volatility, double rate, double dividend, double date) :
 m_stockPrice(stockPrice), m_volatility(volatility), m_interestRate(rate), m_dividendYield(dividend), m_date(date) {}
