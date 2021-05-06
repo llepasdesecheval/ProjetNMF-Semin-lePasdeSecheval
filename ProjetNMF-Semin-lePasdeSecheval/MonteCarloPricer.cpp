@@ -9,6 +9,7 @@
 #include "BinomialTreePricer.hpp"
 #include "EurOption.hpp"
 #include "USOption.hpp"
+#include "LineChart.hpp"
 #include "PolynomialBasis.hpp"
 #include "HermiteBasis.hpp"
 #include "LaguerreBasis.hpp"
@@ -258,9 +259,10 @@ PricerOutput MonteCarloPricer::price(const VanillaOption& option, const BSMModel
     }
 }
 
-static void testGeneratePath() {
-
-    BSMModel model(100, 0.1, 0.05, 0, 1, 0); // Low volatility to have narrow final prices sample
+static void testGeneratePath()
+{
+    double date = 1.0;
+    BSMModel model(100, 0.1, 0.05, 0, date); // Low volatility to have narrow final prices sample
 
     std::size_t nPaths = 10000;
     std::size_t nSteps = 5;
@@ -270,6 +272,13 @@ static void testGeneratePath() {
     Matrix pricePaths = mc.generatePricePaths(model, maturity);
     std::vector<double> finalPrices = pricePaths.ExtractColumn(5);
     ASSERT_APPROX_EQUAL(mean(finalPrices), exp(model.InterestRate() * (maturity - model.Date())) * model.StockPrice(), 0.5);
+    
+    MonteCarloPricer mc2(1, nSteps); // 1 path, 10 000 steps
+    std::vector<double> paths = (mc2.generatePricePaths(model, maturity)).asRow();
+    std::vector<double> dates = linspace(0, maturity, nSteps + 1);
+    LineChart lineChart("Stock price path");
+    lineChart.setSeries(dates, paths);
+    lineChart.writeAsHTML("examplePricePath.html");
 }
 
 static void testEuropeanOptionPricing()

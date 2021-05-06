@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		BF2FD73826091D2B008B2E11 /* testing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF2FD73626091D2B008B2E11 /* testing.cpp */; };
+		BF54691B2643F69B007B7432 /* ChartBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF5469192643F69B007B7432 /* ChartBase.cpp */; };
+		BF54691E2643F715007B7432 /* LineChart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF54691C2643F715007B7432 /* LineChart.cpp */; };
 		BF6F253C261642B2008F6E14 /* LaguerreBasis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF6F253A261642B2008F6E14 /* LaguerreBasis.cpp */; };
 		BF6F254026164399008F6E14 /* BinomialTreePricer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF6F253E26164399008F6E14 /* BinomialTreePricer.cpp */; };
 		BF6F254426164DD3008F6E14 /* MonteCarloPricer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF6F254226164DD3008F6E14 /* MonteCarloPricer.cpp */; };
@@ -40,6 +42,10 @@
 		BF2FD73526091CD8008B2E11 /* stdafx.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = stdafx.hpp; sourceTree = "<group>"; };
 		BF2FD73626091D2B008B2E11 /* testing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testing.cpp; sourceTree = "<group>"; };
 		BF2FD73726091D2B008B2E11 /* testing.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = testing.hpp; sourceTree = "<group>"; };
+		BF5469192643F69B007B7432 /* ChartBase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ChartBase.cpp; sourceTree = "<group>"; };
+		BF54691A2643F69B007B7432 /* ChartBase.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ChartBase.hpp; sourceTree = "<group>"; };
+		BF54691C2643F715007B7432 /* LineChart.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LineChart.cpp; sourceTree = "<group>"; };
+		BF54691D2643F715007B7432 /* LineChart.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LineChart.hpp; sourceTree = "<group>"; };
 		BF6F253A261642B2008F6E14 /* LaguerreBasis.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LaguerreBasis.cpp; sourceTree = "<group>"; };
 		BF6F253B261642B2008F6E14 /* LaguerreBasis.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LaguerreBasis.hpp; sourceTree = "<group>"; };
 		BF6F253E26164399008F6E14 /* BinomialTreePricer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BinomialTreePricer.cpp; sourceTree = "<group>"; };
@@ -107,12 +113,16 @@
 				BF6F253F26164399008F6E14 /* BinomialTreePricer.hpp */,
 				BFA491FC2615DECF004C3758 /* BSMModel.cpp */,
 				BFA491FD2615DECF004C3758 /* BSMModel.hpp */,
+				BF5469192643F69B007B7432 /* ChartBase.cpp */,
+				BF54691A2643F69B007B7432 /* ChartBase.hpp */,
 				BFA491F42615D7BE004C3758 /* EurOption.cpp */,
 				BFA491F52615D7BE004C3758 /* EurOption.hpp */,
 				BFA492042615E68C004C3758 /* HermiteBasis.cpp */,
 				BFA492052615E68C004C3758 /* HermiteBasis.hpp */,
 				BF6F253A261642B2008F6E14 /* LaguerreBasis.cpp */,
 				BF6F253B261642B2008F6E14 /* LaguerreBasis.hpp */,
+				BF54691C2643F715007B7432 /* LineChart.cpp */,
+				BF54691D2643F715007B7432 /* LineChart.hpp */,
 				BFF262B925FD310A001620AD /* main.cpp */,
 				BFA491F82615D844004C3758 /* matlib.cpp */,
 				BFA491F92615D844004C3758 /* matlib.hpp */,
@@ -199,10 +209,12 @@
 				BFA491FE2615DECF004C3758 /* BSMModel.cpp in Sources */,
 				BF6F253C261642B2008F6E14 /* LaguerreBasis.cpp in Sources */,
 				BFCFE81D260C89FA00C6BC55 /* Basis.cpp in Sources */,
+				BF54691E2643F715007B7432 /* LineChart.cpp in Sources */,
 				BFA491FA2615D844004C3758 /* matlib.cpp in Sources */,
 				BFA491F62615D7BE004C3758 /* EurOption.cpp in Sources */,
 				BFCFE819260C884D00C6BC55 /* Matrix.cpp in Sources */,
 				BF2FD73826091D2B008B2E11 /* testing.cpp in Sources */,
+				BF54691B2643F69B007B7432 /* ChartBase.cpp in Sources */,
 				BFA492022615E18C004C3758 /* USOption.cpp in Sources */,
 				BFA492062615E68C004C3758 /* HermiteBasis.cpp in Sources */,
 				BFA491F22615D686004C3758 /* VanillaOption.cpp in Sources */,
